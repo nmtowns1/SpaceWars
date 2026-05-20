@@ -22,7 +22,25 @@ class Player {
         ctx.fillStyle = "green";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
+
+    update(){
+        if(keys.left) {
+            if(this.x > 0) {
+                this.x -= 5;
+            }
+        }
+        if(keys.right) {
+            if(this.x < canvas.width - this.width) {
+                this.x += 5;
+            }
+        }
+    }
 }
+
+
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //key listeners
@@ -56,7 +74,7 @@ window.addEventListener("keyup", (e) => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //elements
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+const canvas = document.getElementById("myCanvas");
 let ctx;
 let player;
 
