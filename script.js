@@ -86,7 +86,24 @@ if(canvas) {
 }
 
 
-player.draw(ctx);
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//GAME LOOP
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+function gameLoop(){
+    //clear the rectangle
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //update the player
+    player.update();
+    //draw the player
+    player.draw(ctx);
+
+    //loop the annimation
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
 
 
 
