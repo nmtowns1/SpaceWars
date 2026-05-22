@@ -1,7 +1,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//objects
+//Objects and Arrays
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//array to hold the projectiles
+const projectiles = [];
 
 //object to hold the state of the keys
 const keys = {
@@ -37,6 +40,24 @@ class Player {
     }
 }
 
+class Projectile {
+    constructor (x, y) {
+        this.x = x;
+        this.y = y;
+        this.width = 5;
+        this.height = 10;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    update(){
+        this.y -= 7;
+    }
+}
+
 
 
 
@@ -63,9 +84,11 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-
-
-
+window.addEventListener("Space", (e) => {
+    if(e.code === "Space") {
+        projectiles.push(new Projectile(player.x + player.width / 2, player.y));
+    }
+});
 
 
 
@@ -86,6 +109,10 @@ if(canvas) {
 }
 
 
+
+
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME LOOP
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,6 +123,14 @@ function gameLoop(){
 
     //update the player
     player.update();
+    
+    //iterate through the projectiles array and draw them
+    projectiles.forEach((projectile) => {
+        projectile.update();
+        projectile.draw(ctx);
+    });
+
+
     //draw the player
     player.draw(ctx);
 
