@@ -1,3 +1,12 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//SETTINGS
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+const invaderSpeed = 2;
+const invaderDropDistance = 20;
+
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Objects and Arrays
@@ -5,6 +14,7 @@
 
 //array to hold the projectiles
 projectiles = [];
+invaders = [];
 
 //object to hold the state of the keys
 const keys = {
@@ -37,6 +47,24 @@ class Player {
                 this.x += 5;
             }
         }
+    }
+}
+
+class Invader{
+    constructor (x, y) {
+        this.x = x;
+        this.y = y;
+        this.width = 40;
+        this.height = 40;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "red";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+     update(){
+        //invader movement logic will go here
     }
 }
 
@@ -108,7 +136,27 @@ if(canvas) {
 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//GRID FOR INVADERS SETUP
+///////////////////////////////////////////////////////////////////////////////////////////////////
+const invaderRows = 5;
+const invaderCols = 10;
+const invaderSpacingX = 20;
+const invaderSpacingY = 20;
+const invaderOffsetX = 50;
+const invaderOffsetY = 50;
 
+function createGrid() {
+    for(let col = 0; col < invaderCols; col++) {
+        for(let row = 0; row < invaderRows; row++) {
+            const x = col * (40 + invaderSpacingX) + invaderOffsetX;
+            const y = row * (40 + invaderSpacingY) + invaderOffsetY;
+            invaders.push(new Invader(x, y));
+        }
+    }
+}
+
+createGrid();
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,6 +178,12 @@ function gameLoop(){
 
     //remove projectiles that are off the screen  
     projectiles = projectiles.filter((projectile) => projectile.y > 0);
+
+    //draw the invaders
+    invaders.forEach((invader) => {
+        invader.draw(ctx);
+    });
+
 
 
     //draw the player
