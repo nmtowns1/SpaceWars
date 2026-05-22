@@ -4,7 +4,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 //array to hold the projectiles
-const projectiles = [];
+projectiles = [];
 
 //object to hold the state of the keys
 const keys = {
@@ -73,6 +73,9 @@ window.addEventListener("keydown", (e) => {
     if(e.key === "ArrowRight" || e.key === "d") {
         keys.right = true;
     }
+    if(e.code === "Space") {
+        projectiles.push(new Projectile(player.x + player.width / 2, player.y));
+    }
 });
 
 window.addEventListener("keyup", (e) => {
@@ -84,11 +87,6 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
-window.addEventListener("Space", (e) => {
-    if(e.code === "Space") {
-        projectiles.push(new Projectile(player.x + player.width / 2, player.y));
-    }
-});
 
 
 
@@ -129,6 +127,9 @@ function gameLoop(){
         projectile.update();
         projectile.draw(ctx);
     });
+
+    //remove projectiles that are off the screen  
+    projectiles = projectiles.filter((projectile) => projectile.y > 0);
 
 
     //draw the player
