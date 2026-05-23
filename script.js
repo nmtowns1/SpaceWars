@@ -2,7 +2,7 @@
 //SETTINGS
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-const invaderSpeed = 2;
+let invaderSpeed = 2;
 const invaderDropDistance = 20;
 
 
@@ -180,9 +180,23 @@ function gameLoop(){
     projectiles = projectiles.filter((projectile) => projectile.y > 0);
 
     //draw the invaders
+    let hitWall = false;
     invaders.forEach((invader) => {
+        invader.x += invaderSpeed;
+            if(invader.x + invader.width >= canvas.width || invader.x <= 0) {
+                hitWall = true;
+            }
+
         invader.draw(ctx);
     });
+
+    //if an invader hits the wall, move them down and reverse direction
+    if(hitWall) {
+        invaders.forEach((invader) => {
+            invader.y += invaderDropDistance;
+        });
+        invaderSpeed *= -1;
+    }
 
 
 
