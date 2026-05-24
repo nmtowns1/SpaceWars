@@ -1,9 +1,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//SETTINGS
+//SETTINGS AND VARIABLES
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-let invaderSpeed = 2;
 const invaderDropDistance = 20;
+let invaderSpeed = 2;
+let score = 0;
+let lazers = [];
+let invaders = [];
+let isGameOver = false;
+let didWin = false;
+
+
 
 
 
@@ -11,10 +18,6 @@ const invaderDropDistance = 20;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Objects and Arrays
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-//array to hold the lazers
-lazers = [];
-invaders = [];
 
 //object to hold the state of the keys
 const keys = {
@@ -50,7 +53,7 @@ class Player {
     }
 }
 
-class Lazer{
+class Invader{
     constructor (x, y) {
         this.x = x;
         this.y = y;
@@ -68,7 +71,7 @@ class Lazer{
     }
 }
 
-class Projectile {
+class Lazer {
     constructor (x, y) {
         this.x = x;
         this.y = y;
@@ -102,7 +105,7 @@ window.addEventListener("keydown", (e) => {
         keys.right = true;
     }
     if(e.code === "Space") {
-        lazers.push(new Projectile(player.x + player.width / 2, player.y));
+        lazers.push(new Lazer(player.x + player.width / 2, player.y));
     }
 });
 
@@ -151,7 +154,7 @@ function createGrid() {
         for(let row = 0; row < invaderRows; row++) {
             const x = col * (40 + invaderSpacingX) + invaderOffsetX;
             const y = row * (40 + invaderSpacingY) + invaderOffsetY;
-            invaders.push(new Invader(x, y));
+            invaders.push(new Invader(x,y));
         }
     }
 }
@@ -166,6 +169,25 @@ createGrid();
 function gameLoop(){
     //clear the rectangle
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //draw message if game is over
+    if(isGameOver) {
+        ctx.fillStyle = "white";
+        ctx.font = "30px Arial";
+        ctx.textAlign = "center";
+        if(didWin) {
+            ctx.fillText("You Win!", canvas.width / 2, canvas.height / 2);
+        } else {
+            ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
+        }
+        return;
+    }
+
+
+
+
+
+
 
     //update the player
     player.update();
@@ -186,7 +208,9 @@ function gameLoop(){
             if(invader.x + invader.width >= canvas.width || invader.x <= 0) {
                 hitWall = true;
             }
-
+            if(invader.y + invader.height >= player.y) {
+                isGameOver = true;
+            }
         invader.draw(ctx);
     });
 
@@ -199,28 +223,30 @@ function gameLoop(){
     }
 
     //collision detection
-    for(i = lazers.length; i >= 0; i--){
-        for(j = invaders.length; j >= 0; j--){
-            leftEdgeLazer = lazers[i].x;
-            leftEdgeInvaders = invader[j].x;
-            rightEdgeLazer = lazers[i].x + lazers[i].width;
-            rightEdgeInvaders = invader[j].x + lazers[j].width;
-
-            topOfLazer = lazer[i].y;
-            topOfInvader = invader[j].y;
-            bottomOfLazer = lazer[i].y + lazer[i].height;
-            bottomOfInvader = invader[j].y + invader[j].height;
-
-
+    for(let i = lazers.length - 1; i >= 0; i--){
+        for(let j = invaders.length - 1; j >= 0; j--){
+            const leftEdgeLazer = lazers[i].x;
+            const leftEdgeInvaders = invaders[j].x;
+            const rightEdgeLazer = lazers[i].x + lazers[i].width;
+            const rightEdgeInvaders = invaders[j].x + invaders[j].width;
+            const topOfLazer = lazers[i].y;
+            const topOfInvader = invaders[j].y;
+            const bottomOfLazer = lazers[i].y + lazers[i].height;
+            const bottomOfInvader = invaders[j].y + invaders[j].height;
 
             if(leftEdgeLazer < rightEdgeInvaders && rightEdgeLazer > leftEdgeInvaders 
                 && topOfLazer < bottomOfInvader && bottomOfLazer > topOfInvader
             ){
-                lazers.splice(1, i);
-                invaders.splice(1, j);
+                lazers.splice(i, 1);
+                invaders.splice(j, 1);
+                score += 10;
                 break;
             }
         }
+    }
+    if(invaders.length === 0) {
+        isGameOver = true;
+        didWin = true;
     }
 
 
