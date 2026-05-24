@@ -3,8 +3,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const invaderDropDistance = 20;
-let invaderSpeed = 2;
 let score = 0;
+let invaderSpeed = 2;
 let lazers = [];
 let invaders = [];
 let isGameOver = false;
@@ -240,6 +240,10 @@ function gameLoop(){
                 lazers.splice(i, 1);
                 invaders.splice(j, 1);
                 score += 10;
+
+                //update the score in the DOM
+                document.getElementById("score-value").textContent = score;
+
                 break;
             }
         }
