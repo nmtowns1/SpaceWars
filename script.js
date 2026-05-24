@@ -12,8 +12,8 @@ const invaderDropDistance = 20;
 //Objects and Arrays
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//array to hold the projectiles
-projectiles = [];
+//array to hold the lazers
+lazers = [];
 invaders = [];
 
 //object to hold the state of the keys
@@ -50,7 +50,7 @@ class Player {
     }
 }
 
-class Invader{
+class Lazer{
     constructor (x, y) {
         this.x = x;
         this.y = y;
@@ -102,7 +102,7 @@ window.addEventListener("keydown", (e) => {
         keys.right = true;
     }
     if(e.code === "Space") {
-        projectiles.push(new Projectile(player.x + player.width / 2, player.y));
+        lazers.push(new Projectile(player.x + player.width / 2, player.y));
     }
 });
 
@@ -170,14 +170,14 @@ function gameLoop(){
     //update the player
     player.update();
     
-    //iterate through the projectiles array and draw them
-    projectiles.forEach((projectile) => {
+    //iterate through the lazers array and draw them
+    lazers.forEach((projectile) => {
         projectile.update();
         projectile.draw(ctx);
     });
 
-    //remove projectiles that are off the screen  
-    projectiles = projectiles.filter((projectile) => projectile.y > 0);
+    //remove lazers that are off the screen  
+    lazers = lazers.filter((projectile) => projectile.y > 0);
 
     //draw the invaders
     let hitWall = false;
@@ -196,6 +196,31 @@ function gameLoop(){
             invader.y += invaderDropDistance;
         });
         invaderSpeed *= -1;
+    }
+
+    //collision detection
+    for(i = lazers.length; i >= 0; i--){
+        for(j = invaders.length; j >= 0; j--){
+            leftEdgeLazer = lazers[i].x;
+            leftEdgeInvaders = invader[j].x;
+            rightEdgeLazer = lazers[i].x + lazers[i].width;
+            rightEdgeInvaders = invader[j].x + lazers[j].width;
+
+            topOfLazer = lazer[i].y;
+            topOfInvader = invader[j].y;
+            bottomOfLazer = lazer[i].y + lazer[i].height;
+            bottomOfInvader = invader[j].y + invader[j].height;
+
+
+
+            if(leftEdgeLazer < rightEdgeInvaders && rightEdgeLazer > leftEdgeInvaders 
+                && topOfLazer < bottomOfInvader && bottomOfLazer > topOfInvader
+            ){
+                lazers.splice(1, i);
+                invaders.splice(1, j);
+                break;
+            }
+        }
     }
 
 
