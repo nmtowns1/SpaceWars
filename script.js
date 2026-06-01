@@ -19,6 +19,10 @@ let didWin = false;
 //Objects and Arrays
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+//image objects
+const playerImg = new Image();
+playerImg.src = "sprites/hero_sprites/New Piskel.png";
+
 //object to hold the state of the keys
 const keys = {
     left: false,
@@ -35,8 +39,7 @@ class Player {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "green";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(playerImg, this.x, this.y, this.width, this.height);
     }
 
     update(){
@@ -162,9 +165,16 @@ function createGrid() {
 createGrid();
 
 
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME LOOP
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//load the player image and start the game loop once it's loaded
+playerImg.onload = function() {
+    gameLoop();
+};
 
 function gameLoop(){
     //clear the rectangle
