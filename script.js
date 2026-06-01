@@ -183,6 +183,12 @@ function gameLoop(){
         return;
     }
 
+    //score display
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText(`Score: ${score}`, 10, 30);
+
 
 
 
@@ -241,8 +247,7 @@ function gameLoop(){
                 invaders.splice(j, 1);
                 score += 10;
 
-                //update the score in the DOM
-                document.getElementById("score-value").textContent = score;
+
 
                 break;
             }
