@@ -3,6 +3,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 const invaderDropDistance = 20;
+
+const STATES = {
+    START_MENU: "START_MENU",
+    SETTINGS: "SETTINGS",
+    PLAYING: "PLAYING",
+    GAME_OVER: "GAME_OVER"
+}
+
+let gameState = STATES.PLAYING;
 let score = 0;
 let invaderSpeed = 2;
 let lazers = [];
@@ -167,19 +176,12 @@ createGrid();
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//GAME LOOP
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//load the player image and start the game loop once it's loaded
-playerImg.onload = function() {
-    gameLoop();
-};
 
-function gameLoop(){
-    //clear the rectangle
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+function drawStartMenu(ctx){}
+function drawSettings(ctx){}
+function drawGame(ctx){
     //draw message if game is over
     if(isGameOver) {
         ctx.fillStyle = "white";
@@ -272,6 +274,37 @@ function gameLoop(){
 
     //draw the player
     player.draw(ctx);
+}
+function drawGameOver(ctx){}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+//GAME LOOP
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+//load the player image and start the game loop once it's loaded
+playerImg.onload = function() {
+    gameLoop();
+};
+
+function gameLoop(){
+    //clear the rectangle
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //check the state of the game and draw the appropriate screen
+    switch(gameState) {
+        case STATES.START_MENU:
+            drawStartMenu(ctx);
+            break;
+        case STATES.SETTINGS:
+            drawSettings(ctx);
+            break;
+        case STATES.PLAYING:
+            drawGame(ctx);
+            break;
+        case STATES.GAME_OVER:
+            drawGameOver(ctx);
+            break;
+    }
 
     //loop the annimation
     requestAnimationFrame(gameLoop);
