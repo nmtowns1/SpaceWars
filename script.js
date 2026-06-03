@@ -2,6 +2,7 @@
 //SETTINGS AND VARIABLES
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+
 const invaderDropDistance = 20;
 
 const STATES = {
@@ -18,6 +19,23 @@ let lazers = [];
 let invaders = [];
 let isGameOver = false;
 let didWin = false;
+let ctx;
+let player;
+
+if(canvas) {
+    ctx = canvas.getContext("2d");
+    player = new Player(canvas.width, canvas.height);
+} else {
+    console.error("Canvas not found");
+}
+
+
+//get the canvas element from the HTML
+const canvas = document.getElementById("myCanvas");
+const startMenuElement = document.getElementById("start-menu");
+const startButton = document.getElementById("start-button");
+const backToMenuButton = document.getElementById("back-button");
+const restartButton = document.getElementById("restart-button");
 
 
 
@@ -107,7 +125,7 @@ class Lazer {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//key listeners
+//key/event listeners
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 window.addEventListener("keydown", (e) => {
     if(e.key === "ArrowLeft" || e.key === "a") {
@@ -130,24 +148,19 @@ window.addEventListener("keyup", (e) => {
     }
 });
 
+startButton.addEventListener("click", () => {
+    gameState = STATES.PLAYING;
+});
 
+backToMenuButton.addEventListener("click", () => {
+    gameState = STATES.START_MENU;
+    startMenuElement.style.display = "none";
+});
 
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//elements
-///////////////////////////////////////////////////////////////////////////////////////////////////
-const canvas = document.getElementById("myCanvas");
-let ctx;
-let player;
-
-if(canvas) {
-    ctx = canvas.getContext("2d");
-    player = new Player(canvas.width, canvas.height);
-} else {
-    console.error("Canvas not found");
-}
+restartButton.addEventListener("click", () => {
+    //reset all variables to their initial state
+    score = 0;
+});
 
 
 
@@ -179,7 +192,9 @@ createGrid();
 
 
 
-function drawStartMenu(ctx){}
+function drawStartMenu(ctx){
+    
+}
 function drawSettings(ctx){}
 function drawGame(ctx){
     //draw message if game is over

@@ -29,4 +29,50 @@ canvas {
     background-color: black;
     max-width: 100%;
     max-height: 100%;
+    z-index: 1;
+}
+
+#game-container {
+    position: relative;
+    z-index: 10;
+}
+
+#start-menu {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: 10;
+    display: flex;
+}
+
+#playing-menu {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: 10;
+    display: none;
+}
+
+#settings-menu {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: 10;
+    display: none;
+}
+
+#game-over-menu {
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: 10;
+    display: none;
 }
