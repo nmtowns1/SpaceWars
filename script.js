@@ -12,7 +12,8 @@ const STATES = {
     GAME_OVER: "GAME_OVER"
 }
 
-let gameState = STATES.PLAYING;
+//let variables to hold the state of the game, score, invader speed, lazers, invaders, and game over status
+let gameState = STATES.START_MENU;
 let score = 0;
 let invaderSpeed = 2;
 let lazers = [];
@@ -22,23 +23,13 @@ let didWin = false;
 let ctx;
 let player;
 
-if(canvas) {
-    ctx = canvas.getContext("2d");
-    player = new Player(canvas.width, canvas.height);
-} else {
-    console.error("Canvas not found");
-}
-
-
+//const variables for the game loop and animation frame
 //get the canvas element from the HTML
 const canvas = document.getElementById("myCanvas");
 const startMenuElement = document.getElementById("start-menu");
 const startButton = document.getElementById("start-button");
 const backToMenuButton = document.getElementById("back-button");
 const restartButton = document.getElementById("restart-button");
-
-
-
 
 
 
@@ -120,7 +111,13 @@ class Lazer {
 }
 
 
-
+//check if the canvas element exists and get the 2D context, then create a new player object
+if(canvas) {
+    ctx = canvas.getContext("2d");
+    player = new Player(canvas.width, canvas.height);
+} else {
+    console.error("Canvas not found");
+}
 
 
 
@@ -154,7 +151,7 @@ startButton.addEventListener("click", () => {
 
 backToMenuButton.addEventListener("click", () => {
     gameState = STATES.START_MENU;
-    startMenuElement.style.display = "none";
+    startMenuElement.style.display = "block";
 });
 
 restartButton.addEventListener("click", () => {
@@ -193,10 +190,13 @@ createGrid();
 
 
 function drawStartMenu(ctx){
-    
+    startMenuElement.style.display = "block";
 }
-function drawSettings(ctx){}
+function drawSettings(ctx){
+    startMenuElement.style.display = "none";
+}
 function drawGame(ctx){
+    startMenuElement.style.display = "none";
     //draw message if game is over
     if(isGameOver) {
         ctx.fillStyle = "white";
@@ -324,8 +324,6 @@ function gameLoop(){
     //loop the annimation
     requestAnimationFrame(gameLoop);
 }
-
-gameLoop();
 
 
 
