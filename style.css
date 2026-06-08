@@ -66,6 +66,8 @@ canvas {
 #start-menu h1 {
     color: white;
     font-size: 3rem;
+    align-self: center;
+    
 }
 
 #start-menu button {

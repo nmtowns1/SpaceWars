@@ -151,7 +151,7 @@ startButton.addEventListener("click", () => {
 
 backToMenuButton.addEventListener("click", () => {
     gameState = STATES.START_MENU;
-    startMenuElement.style.display = "block";
+    startMenuElement.style.display = "flex";
 });
 
 restartButton.addEventListener("click", () => {
@@ -185,16 +185,10 @@ createGrid();
 
 
 
-
-
-
-
 function drawStartMenu(ctx){
-    startMenuElement.style.display = "block";
+    //potentially add some animation or effects to the start menu in the future
 }
-function drawSettings(ctx){
-    startMenuElement.style.display = "none";
-}
+
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
@@ -209,15 +203,13 @@ function drawGame(ctx){
         }
         return;
     }
+    
 
     //score display
     ctx.fillStyle = "white";
     ctx.font = "20px Arial";
     ctx.textAlign = "left";
     ctx.fillText(`Score: ${score}`, 10, 30);
-
-
-
 
 
 
@@ -290,7 +282,6 @@ function drawGame(ctx){
     //draw the player
     player.draw(ctx);
 }
-function drawGameOver(ctx){}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GAME LOOP
@@ -305,20 +296,8 @@ function gameLoop(){
     //clear the rectangle
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    //check the state of the game and draw the appropriate screen
-    switch(gameState) {
-        case STATES.START_MENU:
-            drawStartMenu(ctx);
-            break;
-        case STATES.SETTINGS:
-            drawSettings(ctx);
-            break;
-        case STATES.PLAYING:
-            drawGame(ctx);
-            break;
-        case STATES.GAME_OVER:
-            drawGameOver(ctx);
-            break;
+    if(gameState === STATES.PLAYING) {
+        drawGame(ctx);
     }
 
     //loop the annimation
