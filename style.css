@@ -25,6 +25,7 @@ body {
 }
 
 canvas {
+    margin-top: 10px;
     display: block;
     background-color: black;
     max-width: 100%;
