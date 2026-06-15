@@ -18,6 +18,7 @@ let score = 0;
 let invaderSpeed = 2;
 let lazers = [];
 let invaders = [];
+let bombs = [];
 let isGameOver = false;
 let didWin = false;
 let ctx;
@@ -34,7 +35,7 @@ const restartButton = document.getElementById("restart-button");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//Objects and Arrays
+//Objects and Classes
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 //image objects
@@ -107,6 +108,24 @@ class Lazer {
 
     update(){
         this.y -= 7;
+    }
+}
+
+class Bomb {
+    constructor (x, y) {
+        this.x = x;
+        this.y = y;
+        this.width = 6;
+        this.height = 6;
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "orange";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    update(){
+        this.y += 5;
     }
 }
 
@@ -189,6 +208,10 @@ function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
 }
 
+function createBomb(){
+
+}
+
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
@@ -213,18 +236,27 @@ function drawGame(ctx){
 
 
 
-
     //update the player
     player.update();
+
     
+    //update the projectiles of both the player and the invaders
+    //add bombs
+    bombs.forEach((bomb) => {
+        bomb.update();
+        bomb.draw(ctx);
+    });
+
     //iterate through the lazers array and draw them
     lazers.forEach((projectile) => {
         projectile.update();
         projectile.draw(ctx);
     });
 
+
     //remove lazers that are off the screen  
     lazers = lazers.filter((projectile) => projectile.y > 0);
+    bombs = bombs.filter((bomb) => bomb.y < canvas.height); 
 
     //draw the invaders
     let hitWall = false;
@@ -266,18 +298,29 @@ function drawGame(ctx){
                 invaders.splice(j, 1);
                 score += 10;
 
-
-
                 break;
             }
+        }
+    }
+
+    for(let i = bombs.length - 1; i >= 0; i--){
+        const leftEdgeBomb = bombs[i].x;
+        const rightEdgeBomb = bombs[i].x + bombs[i].width;
+        const topOfBomb = bombs[i].y;
+        const bottomOfBomb = bombs[i].y + bombs[i].height;
+
+        if(leftEdgeBomb < player.x + player.width && rightEdgeBomb > player.x
+            && topOfBomb < player.y + player.height && bottomOfBomb > player.y
+        ){
+            bombs.splice(i, 1);
+            isGameOver = true;
+            break;
         }
     }
     if(invaders.length === 0) {
         isGameOver = true;
         didWin = true;
     }
-
-
 
     //draw the player
     player.draw(ctx);
