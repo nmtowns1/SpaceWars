@@ -210,19 +210,70 @@ function drawStartMenu(ctx){
 }
 
 function createBomb(){
+    //get a random number between 0 and 1
     randomNumber = Math.random();
+
     lowestInvader = invaders[0];
 
+    //find the lowest invader in the array
     if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
         invaders.forEach((invader) => {
             if(invader.y > lowestInvader.y) {
                 lowestInvader = invader;
             }
         });
-        bombs.push(new Bomb(lowestInvader.x + lowestInvader.width / 2, lowestInvader.y + lowestInvader.height / 2));
     }
 
-    invaderTempArr = invaders.filter((invader) => lowestInvader.y > invader.y);
+    //filter the invaders array to only include invaders that are at the same y position or close to it, so that the bomb is dropped from the lowest invader in that column
+    invaderTempArr = invaders.filter((invader) => (lowestInvader.y <= invader.y + invaderSpacingY));
+
+    //get a random invader from the filtered array
+    randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
+
+    //create a new bomb at the random invader's position
+    if(randomInvader) {
+        bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
+    }
+
+}
+
+function checkCollisions() {
+    for(let i = lazers.length - 1; i >= 0; i--){
+        for(let j = invaders.length - 1; j >= 0; j--){
+            const leftEdgeLazer = lazers[i].x;
+            const leftEdgeInvaders = invaders[j].x;
+            const rightEdgeLazer = lazers[i].x + lazers[i].width;
+            const rightEdgeInvaders = invaders[j].x + invaders[j].width;
+            const topOfLazer = lazers[i].y;
+            const topOfInvader = invaders[j].y;
+            const bottomOfLazer = lazers[i].y + lazers[i].height;
+            const bottomOfInvader = invaders[j].y + invaders[j].height;
+
+            if(leftEdgeLazer < rightEdgeInvaders && rightEdgeLazer > leftEdgeInvaders 
+                && topOfLazer < bottomOfInvader && bottomOfLazer > topOfInvader
+            ){
+                lazers.splice(i, 1);
+                invaders.splice(j, 1);
+                score += 10;
+
+                break;
+            }
+        }
+    }
+    for(let i = bombs.length - 1; i >= 0; i--){
+        const leftEdgeBomb = bombs[i].x;
+        const rightEdgeBomb = bombs[i].x + bombs[i].width;
+        const topOfBomb = bombs[i].y;
+        const bottomOfBomb = bombs[i].y + bombs[i].height;
+
+        if(leftEdgeBomb < player.x + player.width && rightEdgeBomb > player.x
+            && topOfBomb < player.y + player.height && bottomOfBomb > player.y
+        ){
+            bombs.splice(i, 1);
+            isGameOver = true;
+            break;
+        }
+    }
 }
 
 function drawGame(ctx){
@@ -292,44 +343,10 @@ function drawGame(ctx){
         invaderSpeed *= -1;
     }
 
-    //collision detection
-    for(let i = lazers.length - 1; i >= 0; i--){
-        for(let j = invaders.length - 1; j >= 0; j--){
-            const leftEdgeLazer = lazers[i].x;
-            const leftEdgeInvaders = invaders[j].x;
-            const rightEdgeLazer = lazers[i].x + lazers[i].width;
-            const rightEdgeInvaders = invaders[j].x + invaders[j].width;
-            const topOfLazer = lazers[i].y;
-            const topOfInvader = invaders[j].y;
-            const bottomOfLazer = lazers[i].y + lazers[i].height;
-            const bottomOfInvader = invaders[j].y + invaders[j].height;
 
-            if(leftEdgeLazer < rightEdgeInvaders && rightEdgeLazer > leftEdgeInvaders 
-                && topOfLazer < bottomOfInvader && bottomOfLazer > topOfInvader
-            ){
-                lazers.splice(i, 1);
-                invaders.splice(j, 1);
-                score += 10;
 
-                break;
-            }
-        }
-    }
+    checkCollisions();
 
-    for(let i = bombs.length - 1; i >= 0; i--){
-        const leftEdgeBomb = bombs[i].x;
-        const rightEdgeBomb = bombs[i].x + bombs[i].width;
-        const topOfBomb = bombs[i].y;
-        const bottomOfBomb = bombs[i].y + bombs[i].height;
-
-        if(leftEdgeBomb < player.x + player.width && rightEdgeBomb > player.x
-            && topOfBomb < player.y + player.height && bottomOfBomb > player.y
-        ){
-            bombs.splice(i, 1);
-            isGameOver = true;
-            break;
-        }
-    }
     if(invaders.length === 0) {
         isGameOver = true;
         didWin = true;
