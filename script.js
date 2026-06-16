@@ -16,6 +16,7 @@ const STATES = {
 let gameState = STATES.START_MENU;
 let score = 0;
 let invaderSpeed = 2;
+let speedOfEnemyFire = 0.01;
 let lazers = [];
 let invaders = [];
 let bombs = [];
@@ -209,7 +210,19 @@ function drawStartMenu(ctx){
 }
 
 function createBomb(){
+    randomNumber = Math.random();
+    lowestInvader = invaders[0];
 
+    if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
+        invaders.forEach((invader) => {
+            if(invader.y > lowestInvader.y) {
+                lowestInvader = invader;
+            }
+        });
+        bombs.push(new Bomb(lowestInvader.x + lowestInvader.width / 2, lowestInvader.y + lowestInvader.height / 2));
+    }
+
+    invaderTempArr = invaders.filter((invader) => lowestInvader.y > invader.y);
 }
 
 function drawGame(ctx){
