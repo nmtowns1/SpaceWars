@@ -16,7 +16,7 @@ const STATES = {
 let gameState = STATES.START_MENU;
 let score = 0;
 let invaderSpeed = 2;
-let speedOfEnemyFire = 0.01;
+let speedOfEnemyFire = 0.02;
 let lazers = [];
 let invaders = [];
 let bombs = [];
@@ -209,30 +209,40 @@ function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
 }
 
+function displayScore(ctx) {
+    ctx.fillStyle = "white";
+    ctx.font = "20px Arial";
+    ctx.textAlign = "left";
+    ctx.fillText(`Score: ${score}`, 10, 30);
+}
+
 function createBomb(){
     //get a random number between 0 and 1
     randomNumber = Math.random();
 
-    lowestInvader = invaders[0];
-
-    //find the lowest invader in the array
     if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
-        invaders.forEach((invader) => {
-            if(invader.y > lowestInvader.y) {
-                lowestInvader = invader;
-            }
-        });
-    }
 
-    //filter the invaders array to only include invaders that are at the same y position or close to it, so that the bomb is dropped from the lowest invader in that column
-    invaderTempArr = invaders.filter((invader) => (lowestInvader.y <= invader.y + invaderSpacingY));
+        lowestInvader = invaders[0];
 
-    //get a random invader from the filtered array
-    randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
+        //find the lowest invader in the array
+        if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
+            invaders.forEach((invader) => {
+                if(invader.y > lowestInvader.y) {
+                    lowestInvader = invader;
+                }
+            });
+        }
 
-    //create a new bomb at the random invader's position
-    if(randomInvader) {
-        bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
+        //filter the invaders array to only include invaders that are at the same y position or close to it, so that the bomb is dropped from the lowest invader in that column
+        invaderTempArr = invaders.filter((invader) => (lowestInvader.y <= invader.y + invaderSpacingY));
+
+        //get a random invader from the filtered array
+        randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
+
+        //create a new bomb at the random invader's position
+        if(randomInvader) {
+            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
+        }
     }
 
 }
@@ -276,6 +286,8 @@ function checkCollisions() {
     }
 }
 
+
+
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
@@ -292,11 +304,7 @@ function drawGame(ctx){
     }
     
 
-    //score display
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.textAlign = "left";
-    ctx.fillText(`Score: ${score}`, 10, 30);
+    displayScore(ctx);
 
 
 
@@ -316,6 +324,8 @@ function drawGame(ctx){
         projectile.update();
         projectile.draw(ctx);
     });
+
+    createBomb();
 
 
     //remove lazers that are off the screen  
@@ -372,7 +382,7 @@ function gameLoop(){
     if(gameState === STATES.PLAYING) {
         drawGame(ctx);
     }
-
+    
     //loop the annimation
     requestAnimationFrame(gameLoop);
 }
