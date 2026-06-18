@@ -24,6 +24,7 @@ let isGameOver = false;
 let didWin = false;
 let ctx;
 let player;
+let lives = 3;
 
 //const variables for the game loop and animation frame
 //get the canvas element from the HTML
@@ -167,6 +168,8 @@ window.addEventListener("keyup", (e) => {
 
 startButton.addEventListener("click", () => {
     gameState = STATES.PLAYING;
+    display_menu = document.getElementById("start-menu");
+
 });
 
 backToMenuButton.addEventListener("click", () => {
@@ -177,6 +180,8 @@ backToMenuButton.addEventListener("click", () => {
 restartButton.addEventListener("click", () => {
     //reset all variables to their initial state
     score = 0;
+    lives = 3;
+    updateLivesDisplay();
 });
 
 
@@ -207,13 +212,6 @@ createGrid();
 
 function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
-}
-
-function displayScore(ctx) {
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.textAlign = "left";
-    ctx.fillText(`Score: ${score}`, 10, 30);
 }
 
 function createBomb(){
@@ -280,10 +278,24 @@ function checkCollisions() {
             && topOfBomb < player.y + player.height && bottomOfBomb > player.y
         ){
             bombs.splice(i, 1);
-            isGameOver = true;
+            lives--;
+            updateLivesDisplay();
+
+            if(lives <= 0) {
+                isGameOver = true;
+            }
+
             break;
         }
     }
+}
+
+function displayScore(ctx) {
+    document.getElementById("score").textContent = "Score: " + score;
+}
+
+function updateLivesDisplay(){
+    document.getElementById("lives").textContent = "Lives: " + lives;
 }
 
 
