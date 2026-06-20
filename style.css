@@ -89,6 +89,17 @@ canvas {
     bottom:0;
     z-index: 10;
     display: none;
+    justify-content: space-between;
+}
+
+#score{
+    color:white;
+    padding: 20px;
+}
+
+#lives{
+    color:white;
+    padding: 20px;
 }
 
 #settings-menu {

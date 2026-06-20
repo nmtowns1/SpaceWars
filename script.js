@@ -168,8 +168,8 @@ window.addEventListener("keyup", (e) => {
 
 startButton.addEventListener("click", () => {
     gameState = STATES.PLAYING;
-    display_menu = document.getElementById("start-menu");
-
+    playingMenu = document.getElementById("playing-menu");
+    playingMenu.style.display = "flex";
 });
 
 backToMenuButton.addEventListener("click", () => {
