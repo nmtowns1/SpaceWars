@@ -35,7 +35,6 @@ const backToMenuButton = document.getElementById("back-button");
 const restartButton = document.getElementById("restart-button");
 
 
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Objects and Classes
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,6 +182,7 @@ restartButton.addEventListener("click", () => {
     lives = 3;
     updateLivesDisplay();
 });
+
 
 
 

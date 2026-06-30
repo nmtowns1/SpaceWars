@@ -82,14 +82,11 @@ canvas {
 }
 
 #playing-menu {
-    position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index: 10;
+    position: flex;
     display: none;
     justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 #score{
