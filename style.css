@@ -110,8 +110,31 @@ canvas {
 }
 
 #game-over-menu {
-    position: flex;
-    justi
-    z-index: 10;
+    flex-direction: column;
+    justify-content: center;
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
     display: none;
+    min-height: 100vh;
+}
+
+#game-over-menu h2{
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+#game-over-menu button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
