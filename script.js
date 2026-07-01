@@ -76,6 +76,11 @@ class Player {
             }
         }
     }
+
+    resetPosition(canvasWidth, canvasHeight) {
+        this.x = (canvasWidth / 2) - (this.width / 2);
+        this.y = canvasHeight - this.height - 25;
+    }
 }
 
 class Invader{
@@ -173,9 +178,10 @@ startButton.addEventListener("click", () => {
 });
 
 restartButton.addEventListener("click", () => {
-    //reset all variables to their initial state
-    score = 0;
-    lives = 3;
+    resetGame();
+    playingMenu.style.display = "flex";
+    
+    gameOverMenu.style.display = "none";
     updateLivesDisplay();
 });
 
@@ -217,6 +223,23 @@ createGrid();
 
 function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
+}
+
+function resetGame(){
+    //reset all variables to their initial state
+    score = 0;
+    lives = 3;
+    gameState = STATES.PLAYING;
+    isGameOver = false;
+    didWin = false;
+    updateLivesDisplay();
+
+    //make the grid of invaders again
+    invaders = [];
+    createGrid();
+
+    //reset the player position
+    player.resetPosition(canvas.width, canvas.height);
 }
 
 function createBomb(){
