@@ -34,6 +34,7 @@ const startButton = document.getElementById("start-button");
 const restartButton = document.getElementById("restart-button");
 const pauseButton = document.getElementById("pause-button");
 const playingMenu = document.getElementById("playing-menu");
+const gameOverMenu = document.getElementById("game-over-menu");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -308,14 +309,7 @@ function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
     if(isGameOver) {
-        ctx.fillStyle = "white";
-        ctx.font = "30px Arial";
-        ctx.textAlign = "center";
-        if(didWin) {
-            ctx.fillText("You Win!", canvas.width / 2, canvas.height / 2);
-        } else {
-            ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-        }
+        gameState = STATES.GAME_OVER;
         return;
     }
     
@@ -397,6 +391,10 @@ function gameLoop(){
 
     if(gameState === STATES.PLAYING) {
         drawGame(ctx);
+    } else if(gameState === STATES.GAME_OVER) {
+        gameOverMenu.style.display = "flex";
+        playingMenu.style.display = "none";
+        
     }
     
     //loop the annimation
