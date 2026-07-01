@@ -33,6 +33,8 @@ const startMenuElement = document.getElementById("start-menu");
 const startButton = document.getElementById("start-button");
 const backToMenuButton = document.getElementById("back-button");
 const restartButton = document.getElementById("restart-button");
+const pauseButton = document.getElementById("pause-button");
+const playingMenu = document.getElementById("playing-menu");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,7 +169,6 @@ window.addEventListener("keyup", (e) => {
 
 startButton.addEventListener("click", () => {
     gameState = STATES.PLAYING;
-    playingMenu = document.getElementById("playing-menu");
     playingMenu.style.display = "flex";
 });
 
@@ -183,6 +184,15 @@ restartButton.addEventListener("click", () => {
     updateLivesDisplay();
 });
 
+pauseButton.addEventListener("click", () => {
+    if(gameState === STATES.PLAYING) {
+        gameState = STATES.START_MENU;
+        startMenuElement.style.display = "flex";
+    } else if(gameState === STATES.START_MENU) {
+        gameState = STATES.PLAYING;
+        startMenuElement.style.display = "none";
+    }
+});
 
 
 
