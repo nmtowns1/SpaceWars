@@ -35,6 +35,7 @@ const restartButton = document.getElementById("restart-button");
 const pauseButton = document.getElementById("pause-button");
 const playingMenu = document.getElementById("playing-menu");
 const gameOverMenu = document.getElementById("game-over-menu");
+const finalScoreElement = document.getElementById("final-score");
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -415,9 +416,9 @@ function gameLoop(){
     if(gameState === STATES.PLAYING) {
         drawGame(ctx);
     } else if(gameState === STATES.GAME_OVER) {
+        finalScoreElement.textContent = score;
         gameOverMenu.style.display = "flex";
         playingMenu.style.display = "none";
-        
     }
     
     //loop the annimation
