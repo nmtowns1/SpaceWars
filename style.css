@@ -81,12 +81,67 @@ canvas {
     cursor: pointer;
 }
 
+#starting-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background-color: rgba(93, 92, 92, 0.8);
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+#starting-box button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #03fa17d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transform: translateY(0) scale(1);
+}
+
+#starting-box button:hover {
+    background-color: #03fa18ad;
+    transform: translateY(-2px) scale(1.05);
+
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#starting-box button:active {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
 #playing-menu {
-    position: flex;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    right: 0;
     display: none;
     justify-content: space-between;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+#playing-menu button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #595a5b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#playing-menu button:hover {
+    background-color: #939394;
 }
 
 #score{
@@ -137,4 +192,10 @@ canvas {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+#game-over-menu p{
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
 }
