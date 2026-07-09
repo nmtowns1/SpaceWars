@@ -25,6 +25,7 @@ let didWin = false;
 let ctx;
 let player;
 let lives = 3;
+let mlTrainingData = [];
 
 //const variables for the game loop and animation frame
 //get the canvas element from the HTML
@@ -121,11 +122,12 @@ class Lazer {
 }
 
 class Bomb {
-    constructor (x, y) {
+    constructor (x, y, mlSnapshot) {
         this.x = x;
         this.y = y;
         this.width = 6;
         this.height = 6;
+        this.mlSnapshot = mlSnapshot;
     }
 
     draw(ctx) {
@@ -245,11 +247,12 @@ function resetGame(){
 
 function createBomb(){
     //get a random number between 0 and 1
-    randomNumber = Math.random();
+    const randomNumber = Math.random();
+
 
     if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
 
-        lowestInvader = invaders[0];
+        let lowestInvader = invaders[0];
 
         //find the lowest invader in the array
         if(randomNumber < speedOfEnemyFire && invaders.length > 0) {
@@ -261,14 +264,26 @@ function createBomb(){
         }
 
         //filter the invaders array to only include invaders that are at the same y position or close to it, so that the bomb is dropped from the lowest invader in that column
-        invaderTempArr = invaders.filter((invader) => (lowestInvader.y <= invader.y + invaderSpacingY));
+        const invaderTempArr = invaders.filter((invader) => (lowestInvader.y <= invader.y + invaderSpacingY));
 
         //get a random invader from the filtered array
-        randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
+        const randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
 
+        //record the information for the machine learning model
+        let mlSnapshot = {
+            //what the AI sees at the moment the shot is fired
+            playerX: player.x,
+            playerDirection: keys.left ? -1 : keys.right ? 1 : 0,
+            invaderX: randomInvader.x,
+            invaderY: randomInvader.y,
+
+            //the result of the shot
+            result: null //this will be filled in later when the player is hit or not hit by the bomb
+
+        };
         //create a new bomb at the random invader's position
         if(randomInvader) {
-            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
+            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height, mlSnapshot));
         }
     }
 
@@ -306,8 +321,15 @@ function checkCollisions() {
         if(leftEdgeBomb < player.x + player.width && rightEdgeBomb > player.x
             && topOfBomb < player.y + player.height && bottomOfBomb > player.y
         ){
+            //record the result of the bomb for machine learning
+            bombs[i].mlSnapshot.result = 1; //hit
+            mlTrainingData.push(bombs[i].mlSnapshot);
+
+            //remove the bomb and decrease lives
             bombs.splice(i, 1);
             lives--;
+
+            //update the lives display
             updateLivesDisplay();
 
             if(lives <= 0) {
@@ -364,7 +386,21 @@ function drawGame(ctx){
 
     //remove lazers that are off the screen  
     lazers = lazers.filter((projectile) => projectile.y > 0);
-    bombs = bombs.filter((bomb) => bomb.y < canvas.height); 
+
+    //remove bombs that are off the screen and record their result for machine learning
+    bombs = bombs.filter((bomb) => {
+
+        //record the result of the bomb for machine learning if it goes off screen
+        if(bomb.y > canvas.height) {
+            bomb.mlSnapshot.result = 0; //miss
+            mlTrainingData.push(bomb.mlSnapshot);
+
+            //remove the bomb from the array
+            return false;
+        }
+        //keep the bomb in the array
+        return true;
+    }); 
 
     //draw the invaders
     let hitWall = false;
