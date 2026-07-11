@@ -349,12 +349,41 @@ function updateLivesDisplay(){
     document.getElementById("lives").textContent = "Lives: " + lives;
 }
 
+async function sendDataToServer() {
+    if(mlTrainingData.length === 0) {
+        console.log("No data to send");
+        return;
+    }
+    const url = "https://probable-space-fiesta-jj7xq66wqx9ph5rp4-8000.app.github.dev/train"; //replace with your server URL
+
+    try {
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ snapshots: mlTrainingData })
+        });
+
+        const result = await response.json();
+        console.log("Results from round:", result);
+
+        mlTrainingData = []; //clear the training data after sending it to the server
+    } catch (error) {
+        console.error("Error sending data to server:", error);
+    }
+}
+
 
 
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
     if(isGameOver) {
+        if(gameState !== STATES.GAME_OVER) {
+            sendDataToServer(mlTrainingData);
+            
+        }
         gameState = STATES.GAME_OVER;
         return;
     }
