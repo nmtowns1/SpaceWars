@@ -381,7 +381,7 @@ function drawGame(ctx){
     //draw message if game is over
     if(isGameOver) {
         if(gameState !== STATES.GAME_OVER) {
-            sendDataToServer(mlTrainingData);
+            sendDataToServer();
             
         }
         gameState = STATES.GAME_OVER;
