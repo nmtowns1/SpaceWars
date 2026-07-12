@@ -8,7 +8,7 @@
             "presentation": {
                 "reveal": "always",
                 "panel":"dedicated",
-                "clear": true,
+                "clear": true
             },
             "runOptions": {
                 "runOn": "folderOpen"
