@@ -354,8 +354,10 @@ async function sendDataToServer() {
         console.log("No data to send");
         return;
     }
-    const url = "https://probable-space-fiesta-jj7xq66wqx9ph5rp4-8000.app.github.dev/train"; //replace with your server URL
 
+    const currentHost = window.location.hostname;
+    const backendHost = currentHost.replace(/-\d+\.app\.github\.dev$/, "-8000.app.github.dev");
+    const url = `https://${backendHost}/train`;
     try {
         const response = await fetch(url, {
             method: "POST",
