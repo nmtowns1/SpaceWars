@@ -33,6 +33,10 @@ class TrainingData(BaseModel):
 
 #create the Random Forest Classifier model
 ai_model = RandomForestClassifier()
+ 
+#history of the training data, to be used for retraining the model with new data
+training_history : List[Snapshot] = []
+
 
 #create the endpoint to train the model
 @app.post("/train")
