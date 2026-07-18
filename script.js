@@ -9,6 +9,7 @@ const STATES = {
     START_MENU: "START_MENU",
     SETTINGS: "SETTINGS",
     PLAYING: "PLAYING",
+    ROUND_OVER: "ROUND_OVER",
     GAME_OVER: "GAME_OVER"
 }
 
@@ -21,6 +22,8 @@ let speedOfEnemyFire = 0.02;
 let lazers = [];
 let invaders = [];
 let bombs = [];
+let currentRound = 1;
+let isRoundOver = false;
 let isGameOver = false;
 let didWin = false;
 let ctx;
@@ -232,7 +235,7 @@ function drawStartMenu(ctx){
 }
 
 //update the invader grid and ability based on the current level
-function updadateInvaderSettings() {
+function updateInvaderSettings() {
     invaderRows = 2 + currentLevel - 1; //increase rows as level increases
     invaderCols = 3 + currentLevel - 1; //increase columns as level increases
     speedOfEnemyFire = 0.01 + (currentLevel - 1) * 0.005; //increase enemy fire rate as level increases
@@ -252,7 +255,7 @@ function softResetGame(){
     player.resetPosition(canvas.width, canvas.height);
 
     //update the level settings based on the current level
-    updadateInvaderSettings();
+    updateInvaderSettings();
 }
 
 function resetGame(){
@@ -415,12 +418,11 @@ async function sendDataToServer() {
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
-    if(isGameOver) {
-        if(gameState !== STATES.GAME_OVER) {
+    if(isRoundOver) {
+        if(gameState !== STATES.ROUND_OVER) {
             sendDataToServer();
-            
         }
-        gameState = STATES.GAME_OVER;
+        gameState = STATES.ROUND_OVER;
         return;
     }
     
@@ -475,7 +477,7 @@ function drawGame(ctx){
                 hitWall = true;
             }
             if(invader.y + invader.height >= player.y) {
-                isGameOver = true;
+                isRoundOver = true;
             }
         invader.draw(ctx);
     });
@@ -492,9 +494,19 @@ function drawGame(ctx){
 
     checkCollisions();
 
+    //check game state for round over
     if(invaders.length === 0) {
-        isGameOver = true;
-        didWin = true;
+        isRoundOver = true;
+        currentRound++;
+        isRoundOver = false;
+
+        if(currentRound > maxLevel) {
+            isGameOver = true;
+            gameState = STATES.GAME_OVER;
+        } else {
+            //reset the level or perform any other necessary actions
+            softResetGame();
+        }
     }
 
     //draw the player
