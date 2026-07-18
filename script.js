@@ -14,6 +14,7 @@ const STATES = {
 
 //let variables to hold the state of the game, score, invader speed, lazers, invaders, and game over status
 let gameState = STATES.START_MENU;
+let currentLevel = 1;
 let score = 0;
 let invaderSpeed = 2;
 let speedOfEnemyFire = 0.02;
@@ -29,6 +30,8 @@ let mlTrainingData = [];
 
 //const variables for the game loop and animation frame
 //get the canvas element from the HTML
+const maxLevel = 3;
+
 const canvas = document.getElementById("myCanvas");
 const startMenuElement = document.getElementById("start-menu");
 const startButton = document.getElementById("start-button");
@@ -203,8 +206,8 @@ pauseButton.addEventListener("click", () => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GRID FOR INVADERS SETUP
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-const invaderRows = 5;
-const invaderCols = 10;
+let invaderRows = 2;
+let invaderCols = 3;
 const invaderSpacingX = 20;
 const invaderSpacingY = 20;
 const invaderOffsetX = 50;
@@ -226,6 +229,30 @@ createGrid();
 
 function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
+}
+
+//update the invader grid and ability based on the current level
+function updadateInvaderSettings() {
+    invaderRows = 2 + currentLevel - 1; //increase rows as level increases
+    invaderCols = 3 + currentLevel - 1; //increase columns as level increases
+    speedOfEnemyFire = 0.01 + (currentLevel - 1) * 0.005; //increase enemy fire rate as level increases
+}
+
+//soft reset of the game, keeping the score and level, but resetting lives and invaders
+function softResetGame(){
+    lives = 3;
+    didWin = false;
+    updateLivesDisplay();
+
+    //make the grid of invaders again
+    invaders = [];
+    createGrid();
+
+    //reset the player position
+    player.resetPosition(canvas.width, canvas.height);
+
+    //update the level settings based on the current level
+    updadateInvaderSettings();
 }
 
 function resetGame(){
@@ -333,7 +360,14 @@ function checkCollisions() {
             updateLivesDisplay();
 
             if(lives <= 0) {
-                isGameOver = true;
+                currentLevel++;
+
+                if(currentLevel > maxLevel) {
+                    isGameOver = true;
+                } else {
+                    //reset the level or perform any other necessary actions
+                    softResetGame();
+                }
             }
 
             break;
