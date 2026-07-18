@@ -125,33 +125,33 @@ canvas {
     right: 0;
     display: none;
     justify-content: space-between;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 15px 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font: bold 1.2rem monospace;
 }
 
 #playing-menu button {
-    padding: 10px 20px;
+    padding: 5px 10px;
     font-size: 1.2rem;
-    background-color: #595a5b;
+    background-color: rgba(255, 255, 255, 0.08);
     color: white;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.4);
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 #playing-menu button:hover {
-    background-color: #939394;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.7);
 }
 
 #score{
     color:white;
-    padding: 20px;
 }
 
 #lives{
     color:white;
-    padding: 20px;
 }
 
 #settings-menu {
