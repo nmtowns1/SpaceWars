@@ -15,7 +15,6 @@ const STATES = {
 
 //let variables to hold the state of the game, score, invader speed, lazers, invaders, and game over status
 let gameState = STATES.START_MENU;
-let currentLevel = 1;
 let score = 0;
 let invaderSpeed = 2;
 let speedOfEnemyFire = 0.02;
@@ -236,26 +235,37 @@ function drawStartMenu(ctx){
 
 //update the invader grid and ability based on the current level
 function updateInvaderSettings() {
-    invaderRows = 2 + currentLevel - 1; //increase rows as level increases
-    invaderCols = 3 + currentLevel - 1; //increase columns as level increases
-    speedOfEnemyFire = 0.01 + (currentLevel - 1) * 0.005; //increase enemy fire rate as level increases
+    invaderRows = 2 + currentRound - 1; //increase rows as level increases
+    invaderCols = 3 + currentRound - 1; //increase columns as level increases
+    speedOfEnemyFire = 0.01 + (currentRound - 1) * 0.005; //increase enemy fire rate as level increases
 }
 
-//soft reset of the game, keeping the score and level, but resetting lives and invaders
-function softResetGame(){
-    lives = 3;
-    didWin = false;
-    updateLivesDisplay();
+function roundOver() {
+    isRoundOver = true;
+    if(currentRound >= maxLevel) {
+        isGameOver = true;
+    } else {
+        currentRound++;
+        updateInvaderSettings();
+        softResetGame();
+    }
+}
 
-    //make the grid of invaders again
-    invaders = [];
-    createGrid();
+function softResetGame() {
+    //reset the game state to playing
+    gameState = STATES.PLAYING;
+    isRoundOver = false;
 
     //reset the player position
     player.resetPosition(canvas.width, canvas.height);
 
-    //update the level settings based on the current level
-    updateInvaderSettings();
+    //clear the lazers and bombs arrays
+    lazers = [];
+    bombs = [];
+
+    //make the grid of invaders again
+    invaders = [];
+    createGrid();
 }
 
 function resetGame(){
@@ -363,14 +373,7 @@ function checkCollisions() {
             updateLivesDisplay();
 
             if(lives <= 0) {
-                currentLevel++;
-
-                if(currentLevel > maxLevel) {
-                    isGameOver = true;
-                } else {
-                    //reset the level or perform any other necessary actions
-                    softResetGame();
-                }
+                isGameOver = true;
             }
 
             break;
@@ -423,6 +426,13 @@ function drawGame(ctx){
             sendDataToServer();
         }
         gameState = STATES.ROUND_OVER;
+        return;
+    }
+    if(isGameOver) {
+        if(gameState !== STATES.GAME_OVER) {
+            sendDataToServer();
+        }
+        gameState = STATES.GAME_OVER;
         return;
     }
     
@@ -494,19 +504,8 @@ function drawGame(ctx){
 
     checkCollisions();
 
-    //check game state for round over
     if(invaders.length === 0) {
-        isRoundOver = true;
-        currentRound++;
-        isRoundOver = false;
-
-        if(currentRound > maxLevel) {
-            isGameOver = true;
-            gameState = STATES.GAME_OVER;
-        } else {
-            //reset the level or perform any other necessary actions
-            softResetGame();
-        }
+        roundOver();
     }
 
     //draw the player
