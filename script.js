@@ -1,3 +1,6 @@
+import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //SETTINGS AND VARIABLES
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -42,108 +45,9 @@ const pauseButton = document.getElementById("pause-button");
 const playingMenu = document.getElementById("playing-menu");
 const gameOverMenu = document.getElementById("game-over-menu");
 const finalScoreElement = document.getElementById("final-score");
+const canvasWidth = canvas ? canvas.width : 800; //default width if canvas is not found
+const canvasHeight = canvas ? canvas.height : 600; //default height if canvas is not found
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//Objects and Classes
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-//image objects
-const playerImg = new Image();
-playerImg.src = "sprites/hero_sprites/New Piskel.png";
-
-//object to hold the state of the keys
-const keys = {
-    left: false,
-    right: false
-};
-
-//player object
-class Player {
-    constructor (canvasWidth, canvasHeight){
-        this.width = 50;
-        this.height = 50;
-        this.x = (canvasWidth / 2) - (this.width / 2);
-        this.y = canvasHeight - this.height - 25;
-    }
-
-    draw(ctx) {
-        ctx.drawImage(playerImg, this.x, this.y, this.width, this.height);
-    }
-
-    update(){
-        if(keys.left) {
-            if(this.x > 0) {
-                this.x -= 5;
-            }
-        }
-        if(keys.right) {
-            if(this.x < canvas.width - this.width) {
-                this.x += 5;
-            }
-        }
-    }
-
-    resetPosition(canvasWidth, canvasHeight) {
-        this.x = (canvasWidth / 2) - (this.width / 2);
-        this.y = canvasHeight - this.height - 25;
-    }
-}
-
-class Invader{
-    constructor (x, y) {
-        this.x = x;
-        this.y = y;
-        this.width = 40;
-        this.height = 40;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "red";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
-     update(){
-        //invader movement logic will go here
-    }
-}
-
-class Lazer {
-    constructor (x, y) {
-        this.x = x;
-        this.y = y;
-        this.width = 5;
-        this.height = 10;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "white";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
-    update(){
-        this.y -= 7;
-    }
-}
-
-class Bomb {
-    constructor (x, y, mlSnapshot) {
-        this.x = x;
-        this.y = y;
-        this.width = 6;
-        this.height = 6;
-        this.mlSnapshot = mlSnapshot;
-    }
-
-    draw(ctx) {
-        ctx.fillStyle = "orange";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-    }
-
-    update(){
-        this.y += 5;
-    }
-}
 
 
 //check if the canvas element exists and get the 2D context, then create a new player object
@@ -153,7 +57,6 @@ if(canvas) {
 } else {
     console.error("Canvas not found");
 }
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -442,7 +345,7 @@ function drawGame(ctx){
 
 
     //update the player
-    player.update();
+    player.update(canvasWidth);
 
     
     //update the projectiles of both the player and the invaders
