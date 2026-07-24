@@ -1,25 +1,21 @@
 import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
 import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows } from './constraints.js';
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//SETTINGS AND VARIABLES
-///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//let variables to hold the state of the game, score, invader speed, lazers, invaders, and game over status
 export let gameState = STATES.START_MENU;
 export let score = 0;
-let invaderSpeed = 2;
-let speedOfEnemyFire = 0.02;
 export let lazers = [];
 export let invaders = [];
 export let bombs = [];
+export let player;
+let invaderSpeed = 2;
+let speedOfEnemyFire = 0.02;
 let currentRound = 1;
 let isRoundOver = false;
 let isGameOver = false;
 let didWin = false;
 let ctx;
-export let player;
 let lives = 3;
 
 //const variables for the game loop and animation frame
