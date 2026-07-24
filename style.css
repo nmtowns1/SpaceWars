@@ -100,18 +100,16 @@ canvas {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-
-    transform: translateY(0) scale(1);
 }
 
-#starting-box button:hover {
+.game-button:hover {
     background-color: #03fa18ad;
     transform: translateY(-2px) scale(1.05);
 
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-#starting-box button:active {
+.game-button:active {
     transform: translateY(-2px) scale(1.01);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
@@ -141,11 +139,6 @@ canvas {
     transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-#playing-menu button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.7);
-}
-
 #score{
     color:white;
 }
@@ -154,15 +147,34 @@ canvas {
     color:white;
 }
 
-#settings-menu {
+#pause-menu {
+    flex-direction: column;
+    justify-content: center;
     position: absolute;
     top:0;
     left:0;
     right:0;
     bottom:0;
-    z-index: 10;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.8);
     display: none;
 }
+#pause-menu h2{
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+#pause-menu button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
 
 #game-over-menu {
     flex-direction: column;
@@ -175,7 +187,6 @@ canvas {
     align-items: center;
     background-color: rgba(0, 0, 0, 0.8);
     display: none;
-    min-height: 100vh;
 }
 
 #game-over-menu h2{

@@ -1,5 +1,5 @@
 import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
-import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance } from './constraints.js';
+import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows } from './constraints.js';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //SETTINGS AND VARIABLES
@@ -29,6 +29,9 @@ export const startMenuElement = document.getElementById("start-menu");
 export const startButton = document.getElementById("start-button");
 export const restartButton = document.getElementById("restart-button");
 export const pauseButton = document.getElementById("pause-button");
+export const pauseMenu = document.getElementById("pause-menu");
+export const resumeButton = document.getElementById("resume-button");
+export const restartButtonPause = document.getElementById("restart-button-pause");
 export const playingMenu = document.getElementById("playing-menu");
 export const gameOverMenu = document.getElementById("game-over-menu");
 export const finalScoreElement = document.getElementById("final-score");
@@ -50,8 +53,8 @@ if(canvas) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GRID FOR INVADERS SETUP
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-let invaderRows = 2;
-let invaderCols = 3;
+let invaderRows = intitialInvaderRows;
+let invaderCols = intitialInvaderCols;
 
 export function changeGameState(newState) {
     gameState = newState;
@@ -114,6 +117,9 @@ export function resetGame(){
     //reset all variables to their initial state
     score = 0;
     lives = 3;
+    invaderCols = intitialInvaderCols;
+    invaderRows = intitialInvaderRows;
+    currentRound = 1;
     gameState = STATES.PLAYING;
     isGameOver = false;
     didWin = false;

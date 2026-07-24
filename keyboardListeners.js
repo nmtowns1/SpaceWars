@@ -1,4 +1,4 @@
-import { changeGameState, gameState, resetGame, updateLivesDisplay, lazers, player, startButton, restartButton, pauseButton, playingMenu, gameOverMenu, startMenuElement } from "./script.js";
+import { changeGameState, gameState, resetGame, updateLivesDisplay, lazers, player, startButton, restartButton, pauseButton, playingMenu, gameOverMenu, startMenuElement, pauseMenu, resumeButton, restartButtonPause } from "./script.js";
 import { keys, Lazer } from "./entities.js";
 import { STATES } from "./constraints.js";
 
@@ -10,6 +10,7 @@ window.addEventListener("keydown", (e) => {
         keys.right = true;
     }
     if(e.code === "Space") {
+        e.preventDefault(); // Prevent the default action of the spacebar (scrolling)
         lazers.push(new Lazer(player.x + player.width / 2, player.y));
     }
 });
@@ -38,10 +39,23 @@ restartButton.addEventListener("click", () => {
 
 pauseButton.addEventListener("click", () => {
     if(gameState === STATES.PLAYING) {
-        changeGameState(STATES.START_MENU);
-        startMenuElement.style.display = "flex";
-    } else if(gameState === STATES.START_MENU) {
+        changeGameState(STATES.PAUSED);
+        pauseMenu.style.display = "flex";
+    } else if(gameState === STATES.PAUSED) {
         changeGameState(STATES.PLAYING);
-        startMenuElement.style.display = "none";
+        pauseMenu.style.display = "none";
     }
+    pauseButton.blur();
+});
+
+resumeButton.addEventListener("click", () => {
+    changeGameState(STATES.PLAYING);
+    pauseMenu.style.display = "none";
+});
+
+restartButtonPause.addEventListener("click", () => {
+    resetGame();
+    changeGameState(STATES.PLAYING);
+    pauseMenu.style.display = "none";
+    playingMenu.style.display = "flex";
 });
