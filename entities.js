@@ -9,12 +9,11 @@ playerImg.src = "sprites/hero_sprites/New Piskel.png";
 
 
 export class Bomb {
-    constructor (x, y, mlSnapshot) {
+    constructor (x, y) {
         this.x = x;
         this.y = y;
         this.width = 6;
         this.height = 6;
-        this.mlSnapshot = mlSnapshot;
     }
 
     draw(ctx) {

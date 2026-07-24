@@ -1,53 +1,40 @@
 import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
-
+import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance } from './constraints.js';
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //SETTINGS AND VARIABLES
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-const invaderDropDistance = 20;
-
-const STATES = {
-    START_MENU: "START_MENU",
-    SETTINGS: "SETTINGS",
-    PLAYING: "PLAYING",
-    ROUND_OVER: "ROUND_OVER",
-    GAME_OVER: "GAME_OVER"
-}
-
 //let variables to hold the state of the game, score, invader speed, lazers, invaders, and game over status
-let gameState = STATES.START_MENU;
-let score = 0;
+export let gameState = STATES.START_MENU;
+export let score = 0;
 let invaderSpeed = 2;
 let speedOfEnemyFire = 0.02;
-let lazers = [];
-let invaders = [];
-let bombs = [];
+export let lazers = [];
+export let invaders = [];
+export let bombs = [];
 let currentRound = 1;
 let isRoundOver = false;
 let isGameOver = false;
 let didWin = false;
 let ctx;
-let player;
+export let player;
 let lives = 3;
-let mlTrainingData = [];
 
 //const variables for the game loop and animation frame
-//get the canvas element from the HTML
-const maxLevel = 3;
 
-const canvas = document.getElementById("myCanvas");
-const startMenuElement = document.getElementById("start-menu");
-const startButton = document.getElementById("start-button");
-const restartButton = document.getElementById("restart-button");
-const pauseButton = document.getElementById("pause-button");
-const playingMenu = document.getElementById("playing-menu");
-const gameOverMenu = document.getElementById("game-over-menu");
-const finalScoreElement = document.getElementById("final-score");
+export const canvas = document.getElementById("myCanvas");
+export const startMenuElement = document.getElementById("start-menu");
+export const startButton = document.getElementById("start-button");
+export const restartButton = document.getElementById("restart-button");
+export const pauseButton = document.getElementById("pause-button");
+export const playingMenu = document.getElementById("playing-menu");
+export const gameOverMenu = document.getElementById("game-over-menu");
+export const finalScoreElement = document.getElementById("final-score");
+
 const canvasWidth = canvas ? canvas.width : 800; //default width if canvas is not found
 const canvasHeight = canvas ? canvas.height : 600; //default height if canvas is not found
-
 
 
 //check if the canvas element exists and get the 2D context, then create a new player object
@@ -59,64 +46,16 @@ if(canvas) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//key/event listeners
-///////////////////////////////////////////////////////////////////////////////////////////////////
-window.addEventListener("keydown", (e) => {
-    if(e.key === "ArrowLeft" || e.key === "a") {
-        keys.left = true;
-    }
-    if(e.key === "ArrowRight" || e.key === "d") {
-        keys.right = true;
-    }
-    if(e.code === "Space") {
-        lazers.push(new Lazer(player.x + player.width / 2, player.y));
-    }
-});
-
-window.addEventListener("keyup", (e) => {
-    if(e.key === "ArrowLeft" || e.key === "a") {
-        keys.left = false;
-    }
-    if(e.key === "ArrowRight" || e.key === "d") {
-        keys.right = false;
-    }
-});
-
-startButton.addEventListener("click", () => {
-    gameState = STATES.PLAYING;
-    playingMenu.style.display = "flex";
-});
-
-restartButton.addEventListener("click", () => {
-    resetGame();
-    playingMenu.style.display = "flex";
-    
-    gameOverMenu.style.display = "none";
-    updateLivesDisplay();
-});
-
-pauseButton.addEventListener("click", () => {
-    if(gameState === STATES.PLAYING) {
-        gameState = STATES.START_MENU;
-        startMenuElement.style.display = "flex";
-    } else if(gameState === STATES.START_MENU) {
-        gameState = STATES.PLAYING;
-        startMenuElement.style.display = "none";
-    }
-});
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //GRID FOR INVADERS SETUP
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 let invaderRows = 2;
 let invaderCols = 3;
-const invaderSpacingX = 20;
-const invaderSpacingY = 20;
-const invaderOffsetX = 50;
-const invaderOffsetY = 50;
+
+export function changeGameState(newState) {
+    gameState = newState;
+}
 
 function createGrid() {
     for(let col = 0; col < invaderCols; col++) {
@@ -171,7 +110,7 @@ function softResetGame() {
     createGrid();
 }
 
-function resetGame(){
+export function resetGame(){
     //reset all variables to their initial state
     score = 0;
     lives = 3;
@@ -212,21 +151,9 @@ function createBomb(){
         //get a random invader from the filtered array
         const randomInvader = invaderTempArr[Math.floor(Math.random() * invaderTempArr.length)];
 
-        //record the information for the machine learning model
-        let mlSnapshot = {
-            //what the AI sees at the moment the shot is fired
-            playerX: player.x,
-            playerDirection: keys.left ? -1 : keys.right ? 1 : 0,
-            invaderX: randomInvader.x,
-            invaderY: randomInvader.y,
-
-            //the result of the shot
-            result: null //this will be filled in later when the player is hit or not hit by the bomb
-
-        };
         //create a new bomb at the random invader's position
         if(randomInvader) {
-            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height, mlSnapshot));
+            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
         }
     }
 
@@ -264,10 +191,6 @@ function checkCollisions() {
         if(leftEdgeBomb < player.x + player.width && rightEdgeBomb > player.x
             && topOfBomb < player.y + player.height && bottomOfBomb > player.y
         ){
-            //record the result of the bomb for machine learning
-            bombs[i].mlSnapshot.result = 1; //hit
-            mlTrainingData.push(bombs[i].mlSnapshot);
-
             //remove the bomb and decrease lives
             bombs.splice(i, 1);
             lives--;
@@ -288,53 +211,18 @@ function displayScore(ctx) {
     document.getElementById("score").textContent = "Score: " + score;
 }
 
-function updateLivesDisplay(){
+export function updateLivesDisplay(){
     document.getElementById("lives").textContent = "Lives: " + lives;
 }
-
-async function sendDataToServer() {
-    if(mlTrainingData.length === 0) {
-        console.log("No data to send");
-        return;
-    }
-
-    const currentHost = window.location.hostname;
-    const backendHost = currentHost.replace(/-\d+\.app\.github\.dev$/, "-8000.app.github.dev");
-    const url = `https://${backendHost}/train`;
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ snapshots: mlTrainingData })
-        });
-
-        const result = await response.json();
-        console.log("Results from round:", result);
-
-        mlTrainingData = []; //clear the training data after sending it to the server
-    } catch (error) {
-        console.error("Error sending data to server:", error);
-    }
-}
-
-
 
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
     if(isRoundOver) {
-        if(gameState !== STATES.ROUND_OVER) {
-            sendDataToServer();
-        }
         gameState = STATES.ROUND_OVER;
         return;
     }
     if(isGameOver) {
-        if(gameState !== STATES.GAME_OVER) {
-            sendDataToServer();
-        }
         gameState = STATES.GAME_OVER;
         return;
     }
@@ -367,14 +255,10 @@ function drawGame(ctx){
     //remove lazers that are off the screen  
     lazers = lazers.filter((projectile) => projectile.y > 0);
 
-    //remove bombs that are off the screen and record their result for machine learning
+    //remove bombs that are off the screen
     bombs = bombs.filter((bomb) => {
 
-        //record the result of the bomb for machine learning if it goes off screen
         if(bomb.y > canvas.height) {
-            bomb.mlSnapshot.result = 0; //miss
-            mlTrainingData.push(bomb.mlSnapshot);
-
             //remove the bomb from the array
             return false;
         }

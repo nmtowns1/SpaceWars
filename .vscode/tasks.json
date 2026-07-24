@@ -1,18 +1,4 @@
 {
     "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Start Python Server",
-            "type": "shell",
-            "command": "cd ML_Backend && ( [ -x venv/bin/uvicorn ] || (python3 -m venv venv && venv/bin/pip install fastapi uvicorn scikit-learn pydantic) ) && venv/bin/uvicorn server:app --reload --host 0.0.0.0 --port 8000",
-            "presentation": {
-                "reveal": "always",
-                "panel":"dedicated",
-                "clear": true
-            },
-            "runOptions": {
-                "runOn": "folderOpen"
-            }
-        }
-    ]
+    "tasks": []
 }
