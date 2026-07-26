@@ -54,9 +54,22 @@ export class Invader{
         ctx.fillStyle = "red";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
+}
 
-     update(){
-        //invader movement logic will go here
+export class alphaInvader extends Invader {
+    constructor(x, y) {
+        super(x, y);
+        this.width = 40;
+        this.height = 40;
+    }
+
+    static get fireType () {
+        return "burst";
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "blue";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
 //player object

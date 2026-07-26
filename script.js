@@ -2,7 +2,7 @@ import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
 import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows } from './constraints.js';
 
 
-
+ 
 export let gameState = STATES.START_MENU;
 export let score = 0;
 export let lazers = [];
