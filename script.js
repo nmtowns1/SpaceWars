@@ -1,5 +1,5 @@
-import { Bomb, Lazer, Invader, Player, keys, playerImg } from './entities.js';
-import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows } from './constraints.js';
+import { Bomb, Lazer, alphaInvader, gruntInvader, Player, keys, playerImg } from './entities.js';
+import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows, alphaInvaderSpawnRate } from './constraints.js';
 
 
  
@@ -9,6 +9,7 @@ export let lazers = [];
 export let invaders = [];
 export let bombs = [];
 export let player;
+let alphaInvaderSpawnRateValue = alphaInvaderSpawnRate;
 let invaderSpeed = 2;
 let speedOfEnemyFire = 0.02;
 let currentRound = 1;
@@ -61,14 +62,15 @@ function createGrid() {
         for(let row = 0; row < invaderRows; row++) {
             const x = col * (40 + invaderSpacingX) + invaderOffsetX;
             const y = row * (40 + invaderSpacingY) + invaderOffsetY;
-            invaders.push(new Invader(x,y));
+            
+            if(Math.random() < alphaInvaderSpawnRateValue) {
+                invaders.push(new alphaInvader(x,y));
+            } else {
+                invaders.push(new gruntInvader(x,y));
+            }
         }
     }
 }
-
-createGrid();
-
-
 
 function drawStartMenu(ctx){
     //potentially add some animation or effects to the start menu in the future
@@ -129,7 +131,7 @@ export function resetGame(){
     player.resetPosition(canvas.width, canvas.height);
 }
 
-function createBomb(){
+function enemyShot(){
     //get a random number between 0 and 1
     const randomNumber = Math.random();
 
@@ -155,7 +157,14 @@ function createBomb(){
 
         //create a new bomb at the random invader's position
         if(randomInvader) {
-            bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height));
+            if(randomInvader.fireType === "single") {
+                bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height, "down"));
+            } else if(randomInvader.fireType === "spray") {
+                //create 3 bombs in a spray pattern
+                bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2 - 10, randomInvader.y + randomInvader.height, "left-down"));
+                bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2, randomInvader.y + randomInvader.height, "down"));
+                bombs.push(new Bomb(randomInvader.x + randomInvader.width / 2 + 10, randomInvader.y + randomInvader.height, "right-down"));
+            }
         }
     }
 
@@ -213,61 +222,7 @@ function displayScore(ctx) {
     document.getElementById("score").textContent = "Score: " + score;
 }
 
-export function updateLivesDisplay(){
-    document.getElementById("lives").textContent = "Lives: " + lives;
-}
-
-function drawGame(ctx){
-    startMenuElement.style.display = "none";
-    //draw message if game is over
-    if(isRoundOver) {
-        gameState = STATES.ROUND_OVER;
-        return;
-    }
-    if(isGameOver) {
-        gameState = STATES.GAME_OVER;
-        return;
-    }
-    
-
-    displayScore(ctx);
-
-
-
-    //update the player
-    player.update(canvasWidth);
-
-    
-    //update the projectiles of both the player and the invaders
-    //add bombs
-    bombs.forEach((bomb) => {
-        bomb.update();
-        bomb.draw(ctx);
-    });
-
-    //iterate through the lazers array and draw them
-    lazers.forEach((projectile) => {
-        projectile.update();
-        projectile.draw(ctx);
-    });
-
-    createBomb();
-
-
-    //remove lazers that are off the screen  
-    lazers = lazers.filter((projectile) => projectile.y > 0);
-
-    //remove bombs that are off the screen
-    bombs = bombs.filter((bomb) => {
-
-        if(bomb.y > canvas.height) {
-            //remove the bomb from the array
-            return false;
-        }
-        //keep the bomb in the array
-        return true;
-    }); 
-
+function updateInvadersPlacement() {
     //draw the invaders
     let hitWall = false;
     invaders.forEach((invader) => {
@@ -288,9 +243,63 @@ function drawGame(ctx){
         });
         invaderSpeed *= -1;
     }
+}
 
+export function updateLivesDisplay(){
+    document.getElementById("lives").textContent = "Lives: " + lives;
+}
 
+function updateProjectiles() {
+    //update the projectiles of both the player and the invaders
+    bombs.forEach((bomb) => {
+        bomb.update();
+        bomb.draw(ctx);
+    });
 
+    //iterate through the lazers array and draw them
+    lazers.forEach((projectile) => {
+        projectile.update();
+        projectile.draw(ctx);
+    });
+}
+
+function offScreenProjRemoval() {
+    //remove lazers that are off the screen  
+    lazers = lazers.filter((projectile) => projectile.y > 0);
+
+    //remove bombs that are off the screen
+    bombs = bombs.filter((bomb) => {
+
+        if(bomb.y > canvas.height) {
+            //remove the bomb from the array
+            return false;
+        }
+        //keep the bomb in the array
+        return true;
+    }); 
+}
+
+function drawGame(ctx){
+    startMenuElement.style.display = "none";
+    //draw message if game is over
+    if(isRoundOver) {
+        gameState = STATES.ROUND_OVER;
+        return;
+    }
+    if(isGameOver) {
+        gameState = STATES.GAME_OVER;
+        return;
+    }
+
+    displayScore(ctx);
+
+    //update the player
+    player.update(canvasWidth);
+
+    updateProjectiles();
+    enemyShot();
+    offScreenProjRemoval();
+    updateInvadersPlacement();
     checkCollisions();
 
     if(invaders.length === 0) {
@@ -309,6 +318,7 @@ function drawGame(ctx){
 playerImg.onload = function() {
     gameLoop();
 };
+createGrid();
 
 function gameLoop(){
     //clear the rectangle

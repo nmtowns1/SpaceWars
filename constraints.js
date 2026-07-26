@@ -15,5 +15,6 @@ export const invaderOffsetX = 50;
 export const invaderOffsetY = 50;
 export const intitialInvaderCols = 3;
 export const intitialInvaderRows = 2;
+export const alphaInvaderSpawnRate = 0.1; //10% chance of spawning an alpha invader
 
 export const invaderDropDistance = 20;

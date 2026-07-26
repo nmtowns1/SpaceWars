@@ -9,12 +9,18 @@ playerImg.src = "sprites/hero_sprites/New Piskel.png";
 
 
 export class Bomb {
-    constructor (x, y) {
+    constructor (x, y, direction) {
         this.x = x;
         this.y = y;
         this.width = 6;
         this.height = 6;
+        this.direction = direction;
     }
+
+    static get bombDirection () {
+        return this.direction;
+    }
+
 
     draw(ctx) {
         ctx.fillStyle = "orange";
@@ -22,7 +28,15 @@ export class Bomb {
     }
 
     update(){
-        this.y += 5;
+        if(this.direction === "down") {
+            this.y += 5;
+        } else if(this.direction === "left-down") {
+            this.x -= 2;
+            this.y += 5;
+        } else if(this.direction === "right-down") {
+            this.x += 2;
+            this.y += 5;
+        }
     }
 }
 export class Lazer {
@@ -51,7 +65,21 @@ export class Invader{
     }
 
     draw(ctx) {
-        ctx.fillStyle = "red";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+}
+export class gruntInvader extends Invader {
+    constructor(x, y) {
+        super(x, y);
+        this.width = 40;
+        this.height = 40;
+    } 
+        get fireType () {
+        return "single";
+    }
+
+    draw(ctx) {
+        ctx.fillStyle = "green";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
@@ -63,8 +91,8 @@ export class alphaInvader extends Invader {
         this.height = 40;
     }
 
-    static get fireType () {
-        return "burst";
+        get fireType () {
+        return "spray";
     }
 
     draw(ctx) {
