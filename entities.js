@@ -5,7 +5,8 @@ export const keys = {
     right: false
 };
 export const playerImg = new Image();
-playerImg.src = "sprites/hero_sprites/New Piskel.png";
+playerImg.src = "sprites/hero_sprites/Blue ship.png";
+
 
 
 export class Bomb {
@@ -107,13 +108,27 @@ export class Player {
         this.height = 50;
         this.x = (canvasWidth / 2) - (this.width / 2);
         this.y = canvasHeight - this.height - 25;
+        this.currentFrame = 0;
+        this.frameTimer = 0;
+        this.frameInterval = 10;
     }
 
     draw(ctx) {
-        ctx.drawImage(playerImg, this.x, this.y, this.width, this.height);
+        let column = this.currentFrame % 8;
+        let row = Math.floor(this.currentFrame / 8);
+        let sx = column * 32; // source x position
+        let sy = row * 32; // source y position
+        let sWidth = 32; // source width
+        let sHeight = 32; // source height
+        ctx.drawImage(playerImg, sx, sy, sWidth, sHeight, this.x, this.y, this.width, this.height);
     }
 
     update(canvasWidth) {
+        this.frameTimer++;
+        if(this.frameTimer >= this.frameInterval) {
+            this.currentFrame = (this.currentFrame + 1) % 72;
+            this.frameTimer = 0;
+        }
         if(keys.left) {
             if(this.x > 0) {
                 this.x -= 5;
