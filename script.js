@@ -111,6 +111,8 @@ function softResetGame() {
     createGrid();
 }
 
+
+
 export function resetGame(){
     //reset all variables to their initial state
     score = 0;
@@ -170,7 +172,7 @@ function enemyShot(){
 
 }
 
-function checkCollisions() {
+function checkShotCollision() {
     for(let i = lazers.length - 1; i >= 0; i--){
         for(let j = invaders.length - 1; j >= 0; j--){
             const leftEdgeLazer = lazers[i].x;
@@ -212,7 +214,6 @@ function checkCollisions() {
             if(lives <= 0) {
                 isGameOver = true;
             }
-
             break;
         }
     }
@@ -279,6 +280,7 @@ function offScreenProjRemoval() {
     }); 
 }
 
+
 function drawGame(ctx){
     startMenuElement.style.display = "none";
     //draw message if game is over
@@ -288,6 +290,8 @@ function drawGame(ctx){
     }
     if(isGameOver) {
         gameState = STATES.GAME_OVER;
+        gameOverMenu.style.display = "flex";
+        playingMenu.style.display = "none";
         return;
     }
 
@@ -300,7 +304,7 @@ function drawGame(ctx){
     enemyShot();
     offScreenProjRemoval();
     updateInvadersPlacement();
-    checkCollisions();
+    checkShotCollision();
 
     if(invaders.length === 0) {
         roundOver();
