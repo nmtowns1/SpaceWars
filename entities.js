@@ -5,7 +5,10 @@ export const keys = {
     right: false
 };
 export const playerImg = new Image();
+export const gruntInvaderImg = new Image();
+
 playerImg.src = "sprites/hero_sprites/Blue ship.png";
+gruntInvaderImg.src = "sprites/enemy_sprites/black_ship.png";
 
 
 
@@ -80,8 +83,7 @@ export class gruntInvader extends Invader {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "green";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(gruntInvaderImg, this.x, this.y, this.width, this.height);
     }
 }
 
