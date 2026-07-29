@@ -110,7 +110,7 @@ export class Player {
         this.y = canvasHeight - this.height - 25;
         this.currentFrame = 0;
         this.frameTimer = 0;
-        this.frameInterval = 10;
+        this.frameInterval = 3;
     }
 
     draw(ctx) {
@@ -126,7 +126,7 @@ export class Player {
     update(canvasWidth) {
         this.frameTimer++;
         if(this.frameTimer >= this.frameInterval) {
-            this.currentFrame = (this.currentFrame + 1) % 72;
+            this.currentFrame = (this.currentFrame + 1) % 71;
             this.frameTimer = 0;
         }
         if(keys.left) {
