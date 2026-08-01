@@ -6,9 +6,12 @@ export const keys = {
 };
 export const playerImg = new Image();
 export const gruntInvaderImg = new Image();
+export const alphaInvaderImg = new Image();
 
-playerImg.src = "sprites/hero_sprites/Blue ship.png";
+playerImg.src = "sprites/hero_sprites/blue_ship.png";
 gruntInvaderImg.src = "sprites/enemy_sprites/black_ship.png";
+alphaInvaderImg.src = "sprites/enemy_sprites/alpha_ship.png";
+
 
 
 
@@ -99,8 +102,7 @@ export class alphaInvader extends Invader {
     }
 
     draw(ctx) {
-        ctx.fillStyle = "blue";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.drawImage(alphaInvaderImg, this.x, this.y, this.width, this.height);
     }
 }
 //player object
