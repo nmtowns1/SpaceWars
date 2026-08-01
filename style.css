@@ -15,9 +15,8 @@ html,body {
     height: 100%;
     overflow: hidden;
     background-color: gray;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'pixelate', monospace;
 }
-
 body {
     display: flex;
     flex-direction: column;
@@ -74,7 +73,7 @@ canvas {
 #start-menu button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #007bff;
+    background-color: #474922;
     color: white;
     border: none;
     border-radius: 5px;
@@ -88,22 +87,22 @@ canvas {
     gap: 20px;
     background-color: rgba(93, 92, 92, 0.8);
     padding: 20px;
-    border-radius: 30px;
+    border-radius: 5px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 #starting-box button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #03fa17d2;
+    background-color: #0b0c05f1;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 2px;
     cursor: pointer;
 }
 
 .game-button:hover {
-    background-color: #03fa18ad;
+    background-color: #474922;
     transform: translateY(-2px) scale(1.05);
 
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -125,7 +124,6 @@ canvas {
     justify-content: space-between;
     padding: 15px 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    font: bold 1.2rem monospace;
 }
 
 #playing-menu button {
@@ -167,7 +165,7 @@ canvas {
 #pause-menu button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #007bff;
+    background-color: #474922;
     color: white;
     border: none;
     border-radius: 5px;
@@ -198,7 +196,7 @@ canvas {
 #game-over-menu button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #007bff;
+    background-color: #474922;
     color: white;
     border: none;
     border-radius: 5px;
