@@ -32,6 +32,7 @@ export const restartButtonPause = document.getElementById("restart-button-pause"
 export const playingMenu = document.getElementById("playing-menu");
 export const gameOverMenu = document.getElementById("game-over-menu");
 export const finalScoreElement = document.getElementById("final-score");
+export const backToMenuButton = document.getElementById("back-to-menu-button");
 
 const canvasWidth = canvas ? canvas.width : 800; //default width if canvas is not found
 const canvasHeight = canvas ? canvas.height : 600; //default height if canvas is not found
@@ -371,6 +372,7 @@ function gameLoop(){
         startMenuElement.style.display = "none";
         playingMenu.style.display = "none";
         gameOverMenu.style.display = "none";
+
         //draw the stars in the background
         updateStars();
     }

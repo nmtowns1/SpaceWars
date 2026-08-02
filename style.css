@@ -79,14 +79,15 @@ canvas {
     border-radius: 5px;
 }
 
-#starting-box button {
+.game-button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #32322ef1;
+    background-color: rgba(255, 255, 255, 0.08);
     color: white;
-    border: none;
-    border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .game-button:hover {
@@ -114,17 +115,6 @@ canvas {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-#playing-menu button {
-    padding: 5px 10px;
-    font-size: 1.2rem;
-    background-color: rgba(255, 255, 255, 0.08);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
 #score{
     color:white;
 }
@@ -148,19 +138,19 @@ canvas {
 #pause-menu h2{
     color: white;
     font-size: 2rem;
-    margin-bottom: 20px;
-}
-#pause-menu button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #474922;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    margin-bottom: 10px;
 }
 
+#pause-box{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
 
+#pause-box button{
+    margin: 3px;
+}
 
 #game-over-menu {
     flex-direction: column;
@@ -179,16 +169,6 @@ canvas {
     color: white;
     font-size: 2rem;
     margin-bottom: 20px;
-}
-
-#game-over-menu button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #474922;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
 #game-over-menu p{
