@@ -13,7 +13,30 @@ gruntInvaderImg.src = "sprites/enemy_sprites/black_ship.png";
 alphaInvaderImg.src = "sprites/enemy_sprites/alpha_ship.png";
 
 
+export class Moon{
+    constructor(x, y, canvasHeight) {
+        this.canvasHeight = canvasHeight;
+        this.x = x;
+        this.y = y;
+        this.height = Math.random() * 30 + 20; // Random height between 20 and 50
+        this.width = this.height; // Make the width equal to the height for a circular shape
+        this.speed = Math.random() * 0.5 + 0.2; // Random speed between 0.2 and 0.7
+    }
+    
+    draw(ctx) {
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.height / 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
 
+    update() {
+        this.y += this.speed;
+        if(this.y > this.canvasHeight + this.height) {
+            this.y = -this.height; // Reset to the top of the canvas
+        }
+    }
+}
 export class Star{
     constructor(x, y, speed, canvasHeight) {
         this.canvasHeight = canvasHeight;
