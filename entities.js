@@ -14,7 +14,26 @@ alphaInvaderImg.src = "sprites/enemy_sprites/alpha_ship.png";
 
 
 
+export class Star{
+    constructor(x, y, speed, canvasHeight) {
+        this.canvasHeight = canvasHeight;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+    }
 
+    draw(ctx) {
+        ctx.fillStyle = "white";
+        ctx.fillRect(this.x, this.y, 1, 1);
+    }
+    
+    update() {
+        this.y += this.speed;
+        if(this.y > this.canvasHeight) {
+            this.y = 0;
+        }
+    }
+}
 export class Bomb {
     constructor (x, y, direction) {
         this.x = x;

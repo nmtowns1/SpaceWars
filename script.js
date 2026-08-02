@@ -1,4 +1,4 @@
-import { Bomb, Lazer, alphaInvader, gruntInvader, Player, keys, playerImg } from './entities.js';
+import { Bomb, Lazer, alphaInvader, gruntInvader, Player, keys, playerImg, Star} from './entities.js';
 import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows, alphaInvaderSpawnRate } from './constraints.js';
 
 
@@ -18,7 +18,7 @@ let isGameOver = false;
 let didWin = false;
 let ctx;
 let lives = 3;
-
+let stars = [];
 //const variables for the game loop and animation frame
 
 export const canvas = document.getElementById("myCanvas");
@@ -55,6 +55,27 @@ let invaderCols = intitialInvaderCols;
 
 export function changeGameState(newState) {
     gameState = newState;
+}
+
+function createStars(){
+    //create 100 stars with random positions and sizes
+    stars = [];
+    for(let i = 0; i < 110; i++) {
+        const x = Math.random() * canvasWidth;
+        const y = Math.random() * canvasHeight;
+
+        //random speed between 1 and 3
+        const speed = Math.random() * 0.75 + 1;
+        stars.push(new Star(x, y, speed, canvasHeight));
+    }
+}
+
+function updateStars() {
+    //update the position of the stars and draw them
+    stars.forEach((star) => {
+        star.update();
+        star.draw(ctx);
+    });
 }
 
 function createGrid() {
@@ -301,6 +322,7 @@ function drawGame(ctx){
     player.update(canvasWidth);
 
     updateProjectiles();
+    updateStars();
     enemyShot();
     offScreenProjRemoval();
     updateInvadersPlacement();
@@ -322,7 +344,15 @@ function drawGame(ctx){
 playerImg.onload = function() {
     gameLoop();
 };
+
+
+
+//create the grid of invaders
 createGrid();
+//create the stars
+createStars();
+
+
 
 function gameLoop(){
     //clear the rectangle
