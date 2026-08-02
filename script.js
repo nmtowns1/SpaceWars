@@ -93,10 +93,6 @@ function createGrid() {
     }
 }
 
-function drawStartMenu(ctx){
-    //potentially add some animation or effects to the start menu in the future
-}
-
 //update the invader grid and ability based on the current level
 function updateInvaderSettings() {
     invaderRows = 2 + currentRound - 1; //increase rows as level increases
@@ -360,13 +356,26 @@ function gameLoop(){
 
     if(gameState === STATES.PLAYING) {
         drawGame(ctx);
-    } else if(gameState === STATES.GAME_OVER) {
+    } else if (gameState === STATES.START_MENU) {
+        startMenuElement.style.display = "flex";
+        playingMenu.style.display = "none";
+        gameOverMenu.style.display = "none";
+
+        //draw the stars in the background
+        updateStars();
+    }else if(gameState === STATES.GAME_OVER) {
         finalScoreElement.textContent = score;
         gameOverMenu.style.display = "flex";
         playingMenu.style.display = "none";
+    } else if(gameState === STATES.PAUSE_MENU) {
+        startMenuElement.style.display = "none";
+        playingMenu.style.display = "none";
+        gameOverMenu.style.display = "none";
+        //draw the stars in the background
+        updateStars();
     }
-    
-    //loop the annimation
+
+    //loop the animation
     requestAnimationFrame(gameLoop);
 }
 

@@ -69,8 +69,8 @@ export class Lazer {
     constructor (x, y) {
         this.x = x;
         this.y = y;
-        this.width = 5;
-        this.height = 10;
+        this.width = 4;
+        this.height = 8;
     }
 
     draw(ctx) {

@@ -59,8 +59,8 @@ canvas {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.8);
     gap: 20px;
+    background:transparent;
 }
 
 #start-menu h1 {
@@ -70,31 +70,19 @@ canvas {
     
 }
 
-#start-menu button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #474922;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 #starting-box {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    background-color: rgba(93, 92, 92, 0.8);
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
 #starting-box button {
     padding: 10px 20px;
     font-size: 1.2rem;
-    background-color: #0b0c05f1;
+    background-color: #32322ef1;
     color: white;
     border: none;
     border-radius: 2px;
@@ -154,7 +142,7 @@ canvas {
     right:0;
     bottom:0;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.8);
+    background: transparent;
     display: none;
 }
 #pause-menu h2{
