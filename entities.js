@@ -18,7 +18,7 @@ export class Moon{
         this.canvasHeight = canvasHeight;
         this.x = x;
         this.y = y;
-        this.height = Math.round(Math.random() * 30 + 20); // Random height between 20 and 50
+        this.height = Math.round(Math.random() * 30 + 10); // Random height between 20 and 50
         this.width = this.height; // Make the width equal to the height for a circular shape
         this.speed = Math.random() * 0.5 + 0.2; // Random speed between 0.2 and 0.7
 
@@ -48,6 +48,23 @@ export class Moon{
 
         //fill the circle with the gradient
         this.moonCtx.fill();
+
+        //draw some craters on the moon
+        const craterCount = Math.floor(Math.random() * 5 + 3); // Random number of craters between 3 and 7
+        for (let i = 0; i < craterCount; i++) {
+            //get the crater radius
+            const craterRadius = Math.random() * (this.width  * 0.1);
+            //pick a random angle
+            const angle = Math.random() * Math.PI * 2;
+            //pick a random radius
+            const radius = Math.random() * (this.moonCanvas.width / 2 - craterRadius); // Crater radius between 0 and 80% of the moon's radius
+            const craterX = this.width / 2 + radius * Math.cos(angle);
+            const craterY = this.height / 2 + radius * Math.sin(angle);
+            this.moonCtx.beginPath();
+            this.moonCtx.arc(craterX, craterY, craterRadius, 0, Math.PI * 2);
+            this.moonCtx.fillStyle = "rgba(0, 0, 0, 0.3)";
+            this.moonCtx.fill();
+        }
     }
     
     draw(ctx) {
