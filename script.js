@@ -1,4 +1,4 @@
-import { Bomb, Lazer, alphaInvader, gruntInvader, Player, keys, playerImg, Star} from './entities.js';
+import { Moon, Bomb, Lazer, alphaInvader, gruntInvader, Player, keys, playerImg, Star} from './entities.js';
 import { STATES, maxLevel, invaderSpacingX, invaderSpacingY, invaderOffsetX, invaderOffsetY, invaderDropDistance, intitialInvaderCols, intitialInvaderRows, alphaInvaderSpawnRate } from './constraints.js';
 
 
@@ -19,6 +19,7 @@ let didWin = false;
 let ctx;
 let lives = 3;
 let stars = [];
+let moons = [];
 //const variables for the game loop and animation frame
 
 export const canvas = document.getElementById("myCanvas");
@@ -58,7 +59,28 @@ export function changeGameState(newState) {
     gameState = newState;
 }
 
-function createStars(){
+function spawnMoon(){
+    const roll = Math.random();
+    let x;
+
+    if(roll < 0.4) {
+        //spawn in the left 20% of the canvas
+        x = Math.random() * (canvasWidth  * 0.2);
+
+    } else if (roll < 0.8) {
+        //spawn in the right 20% of the canvas
+        x = canvasWidth * 0.8 + Math.random() * (canvasWidth * 0.2);
+    } else {
+        //spawn in the middle 60% of the canvas
+        x = canvasWidth * 0.2 + Math.random() * (canvasWidth * 0.6);
+    }
+    const y = Math.random() * (canvasHeight * 0.5); //spawn in the top half of the canvas
+
+    moons.push(new Moon(x, y,  canvasHeight));
+}
+
+
+function createSpaceBackground(){
     //create 100 stars with random positions and sizes
     stars = [];
     for(let i = 0; i < 110; i++) {
@@ -69,13 +91,24 @@ function createStars(){
         const speed = Math.random() * 0.75 + 1;
         stars.push(new Star(x, y, speed, canvasHeight));
     }
+
+    //create either 1 or 2 moons with random positions
+    const numMoons = Math.floor(Math.random() * 2) + 1;
+    moons = [];
+    for(let i = 0; i < numMoons; i++) {
+        spawnMoon();
+    }
 }
 
-function updateStars() {
+function updateSpaceBackground() {
     //update the position of the stars and draw them
     stars.forEach((star) => {
         star.update();
         star.draw(ctx);
+    });
+    moons.forEach((moon) => {
+        moon.update();
+        moon.draw(ctx);
     });
 }
 
@@ -319,7 +352,7 @@ function drawGame(ctx){
     player.update(canvasWidth);
 
     updateProjectiles();
-    updateStars();
+    updateSpaceBackground();
     enemyShot();
     offScreenProjRemoval();
     updateInvadersPlacement();
@@ -347,7 +380,7 @@ playerImg.onload = function() {
 //create the grid of invaders
 createGrid();
 //create the stars
-createStars();
+createSpaceBackground();
 
 
 
@@ -363,7 +396,7 @@ function gameLoop(){
         gameOverMenu.style.display = "none";
 
         //draw the stars in the background
-        updateStars();
+        updateSpaceBackground();
     }else if(gameState === STATES.GAME_OVER) {
         finalScoreElement.textContent = score;
         gameOverMenu.style.display = "flex";
@@ -374,7 +407,7 @@ function gameLoop(){
         gameOverMenu.style.display = "none";
 
         //draw the stars in the background
-        updateStars();
+        updateSpaceBackground();
     }
 
     //loop the animation

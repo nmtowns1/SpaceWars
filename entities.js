@@ -18,22 +18,46 @@ export class Moon{
         this.canvasHeight = canvasHeight;
         this.x = x;
         this.y = y;
-        this.height = Math.random() * 30 + 20; // Random height between 20 and 50
+        this.height = Math.round(Math.random() * 30 + 20); // Random height between 20 and 50
         this.width = this.height; // Make the width equal to the height for a circular shape
         this.speed = Math.random() * 0.5 + 0.2; // Random speed between 0.2 and 0.7
+
+        //create moon canvas
+        this.moonCanvas = document.createElement("canvas");
+        this.moonCanvas.width = this.width;
+        this.moonCanvas.height = this.height;
+        this.moonCtx = this.moonCanvas.getContext("2d");
+
+        //the light is coming from the upper-left corner
+        //draw the moon with a gradient to simulate lighting
+        let gradient = this.moonCtx.createRadialGradient(this.width * 0.3, this.height * 0.3, 
+            this.width * 0.1, this.width * 0.5, this.height * 0.5, this.width * 0.5);
+        gradient.addColorStop(0, "white");
+        gradient.addColorStop(0.60, "rgb(145, 143, 143)");
+        gradient.addColorStop(0.85, "rgb(46, 45, 45)");
+        gradient.addColorStop(1, "rgb(19, 18, 18)");
+
+
+        
+        
+        //draw the moon
+        this.moonCtx.fillStyle = gradient;
+        //draw a circle for the moon
+        this.moonCtx.beginPath();
+        this.moonCtx.arc(this.width / 2, this.height / 2, this.width / 2, 0, Math.PI * 2);
+
+        //fill the circle with the gradient
+        this.moonCtx.fill();
     }
     
     draw(ctx) {
-        ctx.fillStyle = "white";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.height / 2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.drawImage(this.moonCanvas, this.x, this.y, this.width, this.height);
     }
 
     update() {
         this.y += this.speed;
-        if(this.y > this.canvasHeight + this.height) {
-            this.y = -this.height; // Reset to the top of the canvas
+        if(this.y > this.canvasHeight) {
+            this.y = 0;
         }
     }
 }
